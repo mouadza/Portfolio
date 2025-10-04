@@ -51,7 +51,9 @@ I love building software solutions that solve real-world problems. My expertise 
 [GitHub Repo](https://github.com/mouadza/Application-de-gestion-des-permanences-du-week-end)  
 **Tech:** React.js, PHP, MySQL, TailwindCSS  
 
-![Weekend Duty App GIF](![alt text](weekEndPerm.gif))
+![Weekend Duty App GIF]
+
+![alt text](weekEndPerm.gif)
 
 - Developed a **web application** to manage weekend duty schedules efficiently.  
 - Implemented **dynamic scheduling, user management, and notifications** using PHP backend.  
