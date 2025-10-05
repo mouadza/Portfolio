@@ -1,0 +1,2 @@
+src/assets/HotelReserVideo.mp4 filter=lfs diff=lfs merge=lfs -text
+src/assets/weekEndPerm.mp4 filter=lfs diff=lfs merge=lfs -text

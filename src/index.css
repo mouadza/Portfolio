@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.radial-gradient {
+    background: radial-gradient(
+        circle at 50% 0%,
+        rgb(41, 130, 45) 0%,
+        transparent 60%
+    ), rgb(18, 101, 22);
+}
+.linear-mask {
+    mask-image: linear-gradient(
+        -75deg,
+        white calc(var(--x) + 20%),
+        transparent calc(var(--x) + 30%),
+        white calc(var(--x) + 100%)
+    );
+    -webkit-mask-image: linear-gradient(
+        -75deg,
+        white calc(var(--x) + 20%),
+        transparent calc(var(--x) + 30%),
+        white calc(var(--x) + 100%)
+    );
+}
+
+.animated-border {
+    border: 4px solid transparent;
+    background: linear-gradient(to right,  rgb(41, 130, 45), black);
+    background-size: 300% 300%;
+    animation: animate-border 2s linear infinite;
+  }
+  @keyframes animate-border {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  html {
+    scroll-behavior: smooth;
+    transition: all ease 2s;
+  }
+  @keyframes shadowPulse {
+    0% {
+        box-shadow: 0 0 20px 5px rgba(4, 104, 4, 0.6), 0 0 40px 10px rgba(13, 129, 13, 0.8);
+    }
+    50% {
+      box-shadow: 0 0 30px 7px rgba(178, 247, 178, 0.4), 0 0 60px 15px rgba(26, 97, 9, 0.8);
+    }
+    100% {
+        box-shadow: 0 0 20px 5px rgba(178, 247, 178, 0.4), 0 0 40px 10px rgba(178, 247, 178, 0.4);
+    }
+  }
+
+  @keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-popIn {
+  animation: popIn 0.3s ease-in-out;
+}
+
+  
+  
+  
+  
+
+  
