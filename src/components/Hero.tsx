@@ -27,41 +27,39 @@ const Hero = ({ language }: { language: Language }) => {
   const heroRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    let currentIndex = 0;
+  let timeout: ReturnType<typeof setTimeout>;
+  let currentIndex = 0;
 
-    const typeText = () => {
-      if (currentIndex <= intro.length) {
-        setDisplayedText(intro.slice(0, currentIndex));
-        currentIndex++;
-        timeout = setTimeout(typeText, 80); // faster typing
+  const typeText = () => {
+    if (currentIndex <= intro.length) {
+      setDisplayedText(intro.slice(0, currentIndex));
+      currentIndex++;
+      timeout = setTimeout(typeText, 80);
+    }
+  };
+
+  const resetTyping = () => {
+    setDisplayedText("");
+    currentIndex = 0;
+    typeText();
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        resetTyping();
       }
-    };
+    });
+  }, { threshold: 0.5 });
 
-    const resetTyping = () => {
-      setDisplayedText("");
-      currentIndex = 0;
-      typeText();
-    };
+  if (heroRef.current) observer.observe(heroRef.current);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            resetTyping();
-          }
-        });
-      },
-      { threshold: 0.5 } // triggers when 50% of section is visible
-    );
+  return () => {
+    clearTimeout(timeout);
+    if (heroRef.current) observer.unobserve(heroRef.current);
+  };
+}, [intro]);
 
-    if (heroRef.current) observer.observe(heroRef.current);
-
-    return () => {
-      clearTimeout(timeout);
-      if (heroRef.current) observer.unobserve(heroRef.current);
-    };
-  }, [intro]);
 
   return (
     <section
