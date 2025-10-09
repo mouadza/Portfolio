@@ -2,15 +2,14 @@ import { useState, useEffect } from "react";
 import { FaGlobe, FaBars, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
-type Language = "en" | "fr" | "ar";
+type Language = "en" | "fr" ;
 
 const translations: Record<
   Language,
-  { about: string; projects: string; contact: string; changeLang: string }
+  { about: string; technologies: string; projects: string; contact: string; changeLang: string }
 > = {
-  en: { about: "About", projects: "Projects", contact: "Contact", changeLang: "English" },
-  fr: { about: "À Propos", projects: "Projets", contact: "Contact", changeLang: "Français" },
-  ar: { about: "معلومات عنا", projects: "المشاريع", contact: "اتصل", changeLang: "العربية" },
+  en: { about: "About", technologies: "Technologies", projects: "Projects", contact: "Contact", changeLang: "English" },
+  fr: { about: "À Propos", technologies: "Technologies", projects: "Projets", contact: "Contact", changeLang: "Français" },
 };
 
 const Header = ({ language, setLanguage }: { language: Language; setLanguage: (lang: Language) => void }) => {
@@ -27,7 +26,7 @@ const Header = ({ language, setLanguage }: { language: Language; setLanguage: (l
       setLastScrollY(currentScrollY);
 
       // Highlight active section
-      const sections = ["about", "projects", "contact"];
+      const sections = ["about", "technologies", "projects", "contact"];
       for (let sec of sections) {
         const element = document.getElementById(sec);
         if (element) {
@@ -43,6 +42,8 @@ const Header = ({ language, setLanguage }: { language: Language; setLanguage: (l
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
+  const sections = ["about", "technologies", "projects", "contact"];
+
   return (
     <motion.header
       initial={{ y: -100 }}
@@ -54,8 +55,8 @@ const Header = ({ language, setLanguage }: { language: Language; setLanguage: (l
         <h1 className="text-lg md:text-3xl font-bold font-mono">My Portfolio</h1>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex items-center space-x-6 text-sm md:text-lg">
-          {["about", "projects", "contact"].map((sec) => (
+        <nav className="hidden md:flex items-center space-x-8 text-sm md:text-lg">
+          {sections.map((sec) => (
             <a
               key={sec}
               href={`#${sec}`}
@@ -92,7 +93,7 @@ const Header = ({ language, setLanguage }: { language: Language; setLanguage: (l
                   className="absolute right-0 mt-2 w-32 bg-white text-gray-900 rounded-lg shadow-lg overflow-hidden"
                   onMouseLeave={() => setShowDropdown(false)}
                 >
-                  {(["en", "fr", "ar"] as Language[]).map((lang) => (
+                  {(["en", "fr"] as Language[]).map((lang) => (
                     <button
                       key={lang}
                       onClick={() => {
@@ -128,7 +129,7 @@ const Header = ({ language, setLanguage }: { language: Language; setLanguage: (l
             exit={{ opacity: 0, y: -20 }}
             className="md:hidden mt-4 flex flex-col items-center gap-4 text-lg bg-gray-900 py-4 rounded-b-lg shadow-lg"
           >
-            {["about", "projects", "contact"].map((sec) => (
+            {sections.map((sec) => (
               <a
                 key={sec}
                 href={`#${sec}`}

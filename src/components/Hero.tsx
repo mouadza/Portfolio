@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import bgLive from "../assets/HeroBg.gif";
 
-type Language = "en" | "fr" | "ar";
+type Language = "en" | "fr";
 
 const heroTranslations: Record<
   Language,
@@ -18,16 +18,10 @@ const heroTranslations: Record<
     title: "Un ingénieur informatique passionné",
     button: "Voir mon travail",
   },
-  ar: {
-    intro: "مرحبًا، أنا معاذ الزاوية",
-    title: "مهندس برمجيات شغوف",
-    button: "عرض أعمالي",
-  },
 };
 
 const Hero = ({ language }: { language: Language }) => {
   const { intro, title, button } = heroTranslations[language];
-  const isArabic = language === "ar";
 
   const [displayedText, setDisplayedText] = useState("");
   const heroRef = useRef<HTMLElement>(null);
@@ -40,7 +34,7 @@ const Hero = ({ language }: { language: Language }) => {
       if (currentIndex <= intro.length) {
         setDisplayedText(intro.slice(0, currentIndex));
         currentIndex++;
-        timeout = setTimeout(typeText, 50); // faster typing
+        timeout = setTimeout(typeText, 80); // faster typing
       }
     };
 
@@ -72,7 +66,6 @@ const Hero = ({ language }: { language: Language }) => {
   return (
     <section
       ref={heroRef}
-      dir={isArabic ? "rtl" : "ltr"}
       className="relative w-full h-screen text-green-400 text-center overflow-hidden"
     >
       {/* Background */}

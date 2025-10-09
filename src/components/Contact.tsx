@@ -9,7 +9,11 @@ interface FormData {
   message: string;
 }
 
-const Contact = () => {
+type Props = {
+  language: "en" | "fr";
+};
+
+const Contact = ({ language }: Props) => {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
@@ -19,6 +23,29 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false); // Popup state
 
+  const translations = {
+    en: {
+      heading: "Contact Me",
+      description: "I'd love to hear from you! Send me a message below.",
+      labels: { name: "Name", email: "Email", message: "Message" },
+      sendButton: "Send",
+      sending: "Sending...",
+      popupTitle: "Thank You!",
+      popupMessage: "Your message has been sent successfully.",
+    },
+    fr: {
+      heading: "Contactez-moi",
+      description: "J'aimerais avoir de vos nouvelles ! Envoyez-moi un message ci-dessous.",
+      labels: { name: "Nom", email: "Email", message: "Message" },
+      sendButton: "Envoyer",
+      sending: "Envoi...",
+      popupTitle: "Merci !",
+      popupMessage: "Votre message a été envoyé avec succès.",
+    },
+  };
+
+  const t = translations[language];
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
@@ -27,7 +54,7 @@ const Contact = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
-      alert("Please fill in all required fields.");
+      alert(language === "en" ? "Please fill in all required fields." : "Veuillez remplir tous les champs requis.");
       return;
     }
 
@@ -51,7 +78,11 @@ const Contact = () => {
       setTimeout(() => setShowPopup(false), 3000); // Auto-hide after 3 seconds
     } catch (error) {
       console.error("Email sending failed:", error);
-      alert("Failed to send message. Try again later.");
+      alert(
+        language === "en"
+          ? "Failed to send message. Try again later."
+          : "Échec de l'envoi du message. Veuillez réessayer plus tard."
+      );
     } finally {
       setLoading(false);
     }
@@ -60,19 +91,19 @@ const Contact = () => {
   return (
     <section id="contact" className="py-16 px-6 bg-gradient-to-b from-gray-800 to-gray-700 text-center">
       <div className="mx-auto text-gray-200 max-w-lg">
-        <motion.h3 
-        className="text-4xl md:text-5xl font-bold text-lime-300 mb-6 font-mono drop-shadow-[0_0_15px_rgba(172,255,47,0.5)]"
+        <motion.h3
+          className="text-4xl md:text-5xl font-bold text-lime-300 mb-6 font-mono drop-shadow-[0_0_15px_rgba(172,255,47,0.5)]"
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          Contact Me
+          {t.heading}
         </motion.h3>
-        <p className="mb-8 text-lg opacity-80">I'd love to hear from you! Send me a message below.</p>
-        
+        <p className="mb-8 text-lg opacity-80">{t.description}</p>
+
         <form onSubmit={handleSubmit} className="bg-white bg-opacity-10 p-6 rounded-2xl shadow-lg backdrop-blur-lg">
           <div className="mb-4">
-            <label className="block text-left text-gray-300 font-semibold">Name</label>
+            <label className="block text-left text-gray-300 font-semibold">{t.labels.name}</label>
             <input
               type="text"
               name="name"
@@ -84,7 +115,7 @@ const Contact = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-left text-gray-300 font-semibold">Email</label>
+            <label className="block text-left text-gray-300 font-semibold">{t.labels.email}</label>
             <input
               type="email"
               name="email"
@@ -96,7 +127,7 @@ const Contact = () => {
           </div>
 
           <div className="mb-6">
-            <label className="block text-left text-gray-300 font-semibold">Message</label>
+            <label className="block text-left text-gray-300 font-semibold">{t.labels.message}</label>
             <textarea
               name="message"
               rows={4}
@@ -113,37 +144,34 @@ const Contact = () => {
             disabled={loading}
           >
             <FaPaperPlane className="text-lg" />
-            {loading ? "Sending..." : "Send"}
+            {loading ? t.sending : t.sendButton}
           </button>
         </form>
       </div>
 
       {showPopup && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
-    <div className="bg-white text-gray-900 p-6 rounded-2xl shadow-2xl w-[90%] max-w-sm transform scale-100 transition-all duration-300">
-      <div className="flex flex-col items-center">
-        {/* Success Icon */}
-        <div className="w-16 h-16 flex items-center justify-center rounded-full bg-green-100 text-green-500 mb-4">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={2}
-            stroke="currentColor"
-            className="w-10 h-10"
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white text-gray-900 p-6 rounded-2xl shadow-2xl w-[90%] max-w-sm transform scale-100 transition-all duration-300">
+            <div className="flex flex-col items-center">
+              {/* Success Icon */}
+              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-green-100 text-green-500 mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-10 h-10"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h4 className="text-2xl font-semibold mb-2 text-gray-800">{t.popupTitle}</h4>
+              <p className="text-gray-600 text-center">{t.popupMessage}</p>
+            </div>
+          </div>
         </div>
-        <h4 className="text-2xl font-semibold mb-2 text-gray-800">Thank You!</h4>
-        <p className="text-gray-600 text-center">
-          Your message has been sent successfully.
-        </p>
-      </div>
-    </div>
-  </div>
-)}
-
+      )}
     </section>
   );
 };

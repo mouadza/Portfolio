@@ -40,7 +40,7 @@ const About: React.FC<AboutProps> = ({ language }) => {
           className="w-full md:w-1/3 flex justify-center"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: false, margin: "-50px" }}
+          viewport={{ once: false, margin: "-100px" }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
         >
           <div className="relative w-52 h-52 md:w-72 md:h-72 rounded-full overflow-hidden border-4 border-lime-400 shadow-[0_0_40px_rgba(172,255,47,0.6)]">
