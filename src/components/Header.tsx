@@ -27,7 +27,7 @@ const Header = ({ language, setLanguage }: { language: Language; setLanguage: (l
 
       // Highlight active section
       const sections = ["about", "technologies", "projects", "contact"];
-      for (let sec of sections) {
+      for (const sec of sections) {
         const element = document.getElementById(sec);
         if (element) {
           const rect = element.getBoundingClientRect();
