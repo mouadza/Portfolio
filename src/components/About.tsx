@@ -9,16 +9,18 @@ interface AboutProps {
 }
 
 
-const translations: Record<Language, { aboutTitle: string; aboutText: string; contactMe: string }> = {
+const translations: Record<Language, { aboutTitle: string; aboutText: string; contactMe: string }> = {  
   en: {
     aboutTitle: "About Me",
-    aboutText: "I’m a software engineer passionate about AI and full-stack development.",
+    aboutText:
+      "Hi, I'm Mouad Zaouia, a passionate software engineer dedicated to crafting efficient and scalable applications. With a strong foundation in web development, I thrive on solving complex challenges and creating user-focused digital experiences. Outside of work, I enjoy coding and music.",
     contactMe: "Contact Me",
   },
   fr: {
-    aboutTitle: "À propos de moi",
-    aboutText: "Je suis un ingénieur logiciel passionné par l’IA et le développement full-stack.",
-    contactMe: "Contactez-moi",
+    aboutTitle: "À Propos de Moi",
+    aboutText:
+      "Salut, je suis Mouad Zaouia, un ingénieur logiciel passionné, dédié à la création d’applications efficaces et évolutives. Avec une solide expérience en développement web, j’aime résoudre des défis complexes et créer des expériences numériques centrées sur l’utilisateur. En dehors du travail, j’aime coder et écouter de la musique.",
+    contactMe: "Me Contacter",
   },
 };
 
