@@ -1,6 +1,7 @@
 import { FaDownload, FaEye } from "react-icons/fa";
 import { motion } from "framer-motion";
-import myResume from "../assets/MOUAD ZAOUIA CV.pdf";
+import resumeEN from "../assets/MOUAD_ZAOUIA_CV_EN.pdf";
+import resumeFR from "../assets/MOUAD_ZAOUIA_CV_FR.pdf";
 
 type Props = {
   language: "en" | "fr";
@@ -25,6 +26,7 @@ const Resume = ({ language }: Props) => {
   };
 
   const t = translations[language];
+  const selectedResume = language === "fr" ? resumeFR : resumeEN;
 
   return (
     <section
@@ -52,25 +54,13 @@ const Resume = ({ language }: Props) => {
         </motion.h3>
 
         <p className="text-lg text-gray-300 mb-10 max-w-xl mx-auto leading-relaxed font-mono opacity-90">
-          {t.description.split("view")[0]}
-          <span className="text-lime-400 font-semibold">
-            {language === "en" ? "view" : "voir"}
-          </span>{" "}
-          {t.description.includes("download") ? (
-            <>
-              {t.description.split("download")[0].split("view").pop()}{" "}
-              <span className="text-lime-400 font-semibold">
-                {language === "en" ? "download" : "télécharger"}
-              </span>{" "}
-              {t.description.split("download").pop()}
-            </>
-          ) : null}
+          {t.description}
         </p>
 
         <div className="flex flex-wrap justify-center gap-6">
           {/* View Button */}
           <motion.a
-            href={myResume}
+            href={selectedResume}
             target="_blank"
             rel="noopener noreferrer"
             whileHover={{ scale: 1.05, y: -4 }}
@@ -83,8 +73,8 @@ const Resume = ({ language }: Props) => {
 
           {/* Download Button */}
           <motion.a
-            href={myResume}
-            download="Mouad_Zaouia_CV.pdf"
+            href={selectedResume}
+            download={language === "fr" ? "Mouad_Zaouia_CV_FR.pdf" : "Mouad_Zaouia_CV_EN.pdf"}
             whileHover={{ scale: 1.05, y: -4 }}
             whileTap={{ scale: 0.95 }}
             className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-lime-500 to-green-600 text-white rounded-full font-semibold shadow-lg hover:shadow-[0_0_30px_rgba(50,205,50,0.6)] transition-all duration-300"

@@ -121,29 +121,47 @@ const Header = ({ language, setLanguage }: { language: Language; setLanguage: (l
       </div>
 
       {/* Mobile Menu */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.nav
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="md:hidden mt-4 flex flex-col items-center gap-4 text-lg bg-gray-900 py-4 rounded-b-lg shadow-lg"
-          >
-            {sections.map((sec) => (
-              <a
-                key={sec}
-                href={`#${sec}`}
-                className={`px-4 py-2 hover:text-lime-400 transition-colors ${
-                  activeSection === sec ? "text-lime-400 font-semibold" : ""
-                }`}
-                onClick={() => setMenuOpen(false)}
-              >
-                {translations[language][sec as keyof typeof translations["en"]]}
-              </a>
-            ))}
-          </motion.nav>
-        )}
-      </AnimatePresence>
+      {/* Mobile Menu */}
+<AnimatePresence>
+  {menuOpen && (
+    <motion.nav
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="md:hidden mt-4 flex flex-col items-center gap-4 text-lg bg-gray-900 py-4 rounded-b-lg shadow-lg z-50"
+    >
+      {sections.map((sec) => (
+        <a
+          key={sec}
+          href={`#${sec}`}
+          className={`px-4 py-2 hover:text-lime-400 transition-colors ${
+            activeSection === sec ? "text-lime-400 font-semibold" : ""
+          }`}
+          onClick={() => setMenuOpen(false)}
+        >
+          {translations[language][sec as keyof typeof translations["en"]]}
+        </a>
+      ))}
+
+      {/* Language Switcher inside Mobile Menu */}
+      <div className="flex items-center gap-2 mt-3">
+        <FaGlobe className="text-lime-400" />
+        <select
+          value={language}
+          onChange={(e) => {
+            setLanguage(e.target.value as Language);
+            setMenuOpen(false);
+          }}
+          className="bg-gray-800 text-white rounded-md px-3 py-1 border border-lime-400 focus:outline-none"
+        >
+          <option value="en">En</option>
+          <option value="fr">Fr</option>
+        </select>
+      </div>
+    </motion.nav>
+  )}
+</AnimatePresence>
+
     </motion.header>
   );
 };
