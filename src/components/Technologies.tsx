@@ -14,6 +14,7 @@ import {
 import { DiVisualstudio } from "react-icons/di";
 
 type Language = "en" | "fr";
+type Theme = "light" | "dark";
 
 const techTranslations: Record<
   Language,
@@ -39,10 +40,9 @@ const techTranslations: Record<
       ai: "IA / Science des données",
       tools: "Outils & Environnements de développement",
     },
-  },  
+  },
 };
 
-// 🧠 Each category with mastery %
 const categories = {
   frontend: [
     { name: "React", icon: SiReact, color: "text-sky-400", level: 80 },
@@ -65,17 +65,31 @@ const categories = {
   ],
 };
 
-const Technologies = ({ language }: { language: Language }) => {
+const Technologies = ({ language, theme }: { language: Language; theme: Theme }) => {
   const { title, subtitle, categories: catLabels } = techTranslations[language];
+  const isDark = theme === "dark";
+
+  const textColor = isDark ? "text-sky-400" : "text-blue-600";
+  const categoryColor = isDark ? "text-sky-400" : "text-blue-600";
+  const percentageColor = isDark ? "text-sky-400" : "text-blue-600"; // neo blue
+
+  const cardBg = isDark
+    ? "bg-gray-800/40"
+    : "bg-gray-100/60"; // lighter cards on light mode
+  const borderColor = isDark ? "border-gray-700" : "border-gray-300";
 
   return (
     <section
       id="technologies"
-      className="min-h-screen bg-gradient-to-b from-gray-900 via-black to-gray-800 text-white py-20 px-8"
+      className={`min-h-screen py-20 px-8 transition-colors duration-500`}
     >
       <div className="max-w-6xl mx-auto text-center">
         <motion.h3
-          className="text-4xl md:text-5xl font-bold text-lime-300 mb-4 font-mono drop-shadow-[0_0_15px_rgba(172,255,47,0.5)]"
+          className={`text-4xl md:text-5xl font-bold mb-6 font-mono drop-shadow-[0_0_15px_rgba(0,150,255,0.5)] ${
+            isDark
+              ? "bg-gradient-to-r from-blue-400 via-blue-300 to-sky-400 bg-clip-text text-transparent"
+              : "bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+          }`}
           initial={{ opacity: 0, y: -40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -84,7 +98,7 @@ const Technologies = ({ language }: { language: Language }) => {
         </motion.h3>
 
         <motion.p
-          className="text-gray-300 mb-16 text-lg max-w-3xl mx-auto"
+          className={`mb-16 text-lg max-w-3xl mx-auto text-gray-500`}
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -96,13 +110,15 @@ const Technologies = ({ language }: { language: Language }) => {
           {Object.entries(categories).map(([key, techList], i) => (
             <motion.div
               key={key}
-              className="bg-gray-800/40 backdrop-blur-lg border border-gray-700 rounded-2xl p-8 shadow-lg hover:shadow-lime-400/20 transition-all"
+              className={`${cardBg} backdrop-blur-lg border ${borderColor} rounded-2xl p-8 shadow-lg transition-all`}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: i * 0.1 }}
               viewport={{ once: false }}
             >
-              <h4 className="text-2xl font-semibold text-lime-200 mb-8 border-b border-lime-400/30 pb-2">
+              <h4
+                className={`text-2xl font-semibold mb-8 pb-2 border-b ${borderColor} ${categoryColor}`}
+              >
                 {catLabels[key as keyof typeof catLabels]}
               </h4>
 
@@ -120,15 +136,19 @@ const Technologies = ({ language }: { language: Language }) => {
                       <div className="flex items-center justify-between mb-1">
                         <div className="flex items-center gap-3">
                           <Icon className={`text-2xl ${tech.color}`} />
-                          <span className="text-gray-200 font-medium">{tech.name}</span>
+                          <span className={`${textColor} font-medium`}>
+                            {tech.name}
+                          </span>
                         </div>
-                        <span className="text-lime-300 font-semibold">{tech.level}%</span>
+                        <span className={`${percentageColor} font-semibold`}>
+                          {tech.level}%
+                        </span>
                       </div>
 
                       {/* Progress bar */}
-                      <div className="w-full bg-gray-700/50 rounded-full h-3 overflow-hidden">
+                      <div className="w-full bg-gray-300/30 dark:bg-gray-700/30 rounded-full h-3 overflow-hidden">
                         <motion.div
-                          className="bg-gradient-to-r from-lime-400 to-cyan-400 h-3 rounded-full"
+                          className="bg-gradient-to-r from-blue-500 to-white h-3 rounded-full"
                           initial={{ width: 0 }}
                           whileInView={{ width: `${tech.level}%` }}
                           transition={{ duration: 1, delay: 0.2 }}

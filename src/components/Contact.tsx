@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { FaPaperPlane } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { FaLinkedin, FaWhatsapp, FaEnvelope, FaPaperPlane } from "react-icons/fa";
 import emailjs from "@emailjs/browser";
 
 interface FormData {
@@ -11,164 +11,221 @@ interface FormData {
 
 type Props = {
   language: "en" | "fr";
+  theme: "light" | "dark";
 };
 
-const Contact = ({ language }: Props) => {
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    message: "",
-  });
-
+const Contact = ({ language, theme }: Props) => {
+  const [formData, setFormData] = useState<FormData>({ name: "", email: "", message: "" });
   const [loading, setLoading] = useState(false);
-  const [showPopup, setShowPopup] = useState(false); // Popup state
+  const [showPopup, setShowPopup] = useState(false);
 
-  const translations = {
+  const isDark = theme === "dark";
+
+  const t = {
     en: {
-      heading: "Contact Me",
-      description: "I'd love to hear from you! Send me a message below.",
+      title: "Get in Touch",
+      desc: "Let's collaborate or just say hello. You can reach me directly or send a quick message below.",
       labels: { name: "Name", email: "Email", message: "Message" },
-      sendButton: "Send",
+      send: "Send Message",
       sending: "Sending...",
       popupTitle: "Thank You!",
-      popupMessage: "Your message has been sent successfully.",
+      popupMsg: "Your message has been sent successfully.",
     },
     fr: {
-      heading: "Contactez-moi",
-      description: "J'aimerais avoir de vos nouvelles ! Envoyez-moi un message ci-dessous.",
+      title: "Contactez-moi",
+      desc: "Travaillons ensemble ou dites simplement bonjour. Contactez-moi directement ou envoyez un message ci-dessous.",
       labels: { name: "Nom", email: "Email", message: "Message" },
-      sendButton: "Envoyer",
+      send: "Envoyer le message",
       sending: "Envoi...",
       popupTitle: "Merci !",
-      popupMessage: "Votre message a été envoyé avec succès.",
+      popupMsg: "Votre message a été envoyé avec succès.",
     },
-  };
+  }[language];
 
-  const t = translations[language];
+  const contacts = [
+    {
+      name: "LinkedIn",
+      icon: FaLinkedin,
+      link: "https://www.linkedin.com/in/mouad-zaouia",
+      color: "#0077B5",
+    },
+    {
+      name: "WhatsApp",
+      icon: FaWhatsapp,
+      link: "https://wa.me/212670295382",
+      color: "#25D366",
+    },
+    {
+      name: "Email",
+      icon: FaEnvelope,
+      link: "mailto:Mouad.Zaouia@emsi-edu.ma",
+      color: "#D44638",
+    },
+  ];
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
-  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
-      alert(language === "en" ? "Please fill in all required fields." : "Veuillez remplir tous les champs requis.");
+      alert(language === "en" ? "Please fill all fields." : "Veuillez remplir tous les champs.");
       return;
     }
 
     setLoading(true);
-
     try {
       await emailjs.send(
         "service_3uo5w76",
         "template_8nfhu6n",
-        {
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-        },
+        formData,
         "wohtiXV6mCo4QPgeM"
       );
-
-      setShowPopup(true); // Show popup on success
+      setShowPopup(true);
       setFormData({ name: "", email: "", message: "" });
-
-      setTimeout(() => setShowPopup(false), 3000); // Auto-hide after 3 seconds
-    } catch (error) {
-      console.error("Email sending failed:", error);
-      alert(
-        language === "en"
-          ? "Failed to send message. Try again later."
-          : "Échec de l'envoi du message. Veuillez réessayer plus tard."
-      );
+      setTimeout(() => setShowPopup(false), 3000);
+    } catch {
+      alert(language === "en" ? "Message failed. Try again." : "Échec de l'envoi.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <section id="contact" className="py-16 px-6 bg-gradient-to-b from-gray-800 to-gray-700 text-center">
-      <div className="mx-auto text-gray-200 max-w-lg">
-        <motion.h3
-          className="text-4xl md:text-5xl font-bold text-lime-300 mb-6 font-mono drop-shadow-[0_0_15px_rgba(172,255,47,0.5)]"
-          initial={{ opacity: 0, y: -30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+    <section
+      id="contact"
+      className={`py-20 px-6 relative ${
+        isDark ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-800"
+      }`}
+    >
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        {/* LEFT - Contact Links */}
+<motion.div
+  initial={{ opacity: 0, x: -40 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6 }}
+  className="flex flex-col items-center md:items-start space-y-6"
+>
+  <h2
+    className={`text-4xl font-bold bg-gradient-to-r ${
+      isDark
+        ? "from-sky-400 to-blue-400"
+        : "from-blue-600 to-sky-500"
+    } bg-clip-text text-transparent`}
+  >
+    {t.title}
+  </h2>
+  <p className="max-w-md text-center md:text-left opacity-80">{t.desc}</p>
+
+  <div className="grid grid-cols-3 gap-8 mt-6">
+    {contacts.map(({ name, icon: Icon, link, color }) => (
+      <motion.a
+        key={name}
+        href={link}
+        target="_blank"
+        rel="noopener noreferrer"
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.95 }}
+        className={`group flex flex-col items-center justify-center space-y-2 transition-all duration-300`}
+      >
+        <div
+          className={`w-16 h-16 flex items-center justify-center rounded-2xl shadow-lg transition-all duration-300 ${
+            isDark ? "bg-white" : "bg-gray-800"
+          } group-hover:shadow-xl`}
+          style={{
+            border: `2px solid ${color}`,
+            color: color,
+          }}
         >
-          {t.heading}
-        </motion.h3>
-        <p className="mb-8 text-lg opacity-80">{t.description}</p>
+          <Icon className="text-3xl transition-transform duration-300 group-hover:scale-110" />
+        </div>
+        <span
+          className={`font-medium text-sm ${
+            isDark ? "text-gray-200" : "text-gray-700"
+          } group-hover:text-[${color}]`}
+        >
+          {name}
+        </span>
+      </motion.a>
+    ))}
+  </div>
+</motion.div>
 
-        <form onSubmit={handleSubmit} className="bg-white bg-opacity-10 p-6 rounded-2xl shadow-lg backdrop-blur-lg">
-          <div className="mb-4">
-            <label className="block text-left text-gray-300 font-semibold">{t.labels.name}</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 mt-1 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
-            />
-          </div>
 
-          <div className="mb-4">
-            <label className="block text-left text-gray-300 font-semibold">{t.labels.email}</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 mt-1 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
-            />
-          </div>
+        {/* RIGHT - Contact Form */}
+        <motion.form
+          onSubmit={handleSubmit}
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          className={`p-8 rounded-2xl shadow-lg ${
+            isDark ? "bg-gray-800" : "bg-white"
+          }`}
+        >
+          {(["name", "email", "message"] as const).map((field) => (
+            <div key={field} className="mb-5 text-left">
+              <label
+                className={`block font-semibold mb-2 ${
+                  isDark
+                    ? "text-sky-300"
+                    : "text-blue-600"
+                }`}
+              >
+                {t.labels[field]}
+              </label>
+              {field === "message" ? (
+                <textarea
+                  name={field}
+                  rows={4}
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-900"
+                />
+              ) : (
+                <input
+                  type={field === "email" ? "email" : "text"}
+                  name={field}
+                  value={formData[field]}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-900"
+                />
+              )}
+            </div>
+          ))}
 
-          <div className="mb-6">
-            <label className="block text-left text-gray-300 font-semibold">{t.labels.message}</label>
-            <textarea
-              name="message"
-              rows={4}
-              value={formData.message}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 mt-1 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-300"
-            ></textarea>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full flex items-center justify-center gap-2 bg-green-500 text-white py-3 rounded-full font-semibold shadow-lg hover:bg-green-600 transition-all duration-300"
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             disabled={loading}
+            className="w-full py-3 rounded-lg text-white font-semibold shadow-md bg-gradient-to-r from-blue-600 to-sky-500 hover:from-blue-500 hover:to-sky-400 transition-all duration-300 flex items-center justify-center gap-2"
           >
-            <FaPaperPlane className="text-lg" />
-            {loading ? t.sending : t.sendButton}
-          </button>
-        </form>
+            <FaPaperPlane />
+            {loading ? t.sending : t.send}
+          </motion.button>
+        </motion.form>
       </div>
 
+      {/* SUCCESS POPUP */}
       {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-white text-gray-900 p-6 rounded-2xl shadow-2xl w-[90%] max-w-sm transform scale-100 transition-all duration-300">
-            <div className="flex flex-col items-center">
-              {/* Success Icon */}
-              <div className="w-16 h-16 flex items-center justify-center rounded-full bg-green-100 text-green-500 mb-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-10 h-10"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <h4 className="text-2xl font-semibold mb-2 text-gray-800">{t.popupTitle}</h4>
-              <p className="text-gray-600 text-center">{t.popupMessage}</p>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm">
+          <div
+            className={`p-6 rounded-2xl shadow-2xl w-[90%] max-w-sm text-center ${
+              isDark ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
+            }`}
+          >
+            <div
+              className={`w-14 h-14 mx-auto mb-4 flex items-center justify-center rounded-full ${
+                isDark ? "bg-blue-100 text-blue-500" : "bg-blue-100 text-blue-600"
+              }`}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-8 h-8">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
             </div>
+            <h4 className="text-xl font-semibold mb-1">{t.popupTitle}</h4>
+            <p>{t.popupMsg}</p>
           </div>
         </div>
       )}

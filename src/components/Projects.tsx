@@ -17,6 +17,7 @@ interface Project {
 
 type Props = {
   language: "en" | "fr";
+  theme: "light" | "dark";
 };
 
 const projects: Project[] = [
@@ -60,44 +61,45 @@ const projects: Project[] = [
     },
     githubLink: "https://github.com/mouadza/HotelReservationFrontOffice",
   },
-
 ];
 
-const Portfolio: React.FC<Props> = ({ language }) => {
+const Portfolio: React.FC<Props> = ({ language, theme }) => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const isDark = theme === "dark";
 
   const translations = {
-    en: {
-      title: "Projects",
-      demo: "Demo",
-      code: "Code",
-    },
-    fr: {
-      title: "Projets",
-      demo: "Démo",
-      code: "Code",
-    },
+    en: { title: "Projects", demo: "Demo", code: "Code" },
+    fr: { title: "Projets", demo: "Démo", code: "Code" },
   };
-
   const t = translations[language];
 
   return (
     <section
       id="projects"
-      className="relative py-24 px-6 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white overflow-hidden"
+      className={`relative py-24 px-6 transition-colors duration-500 flex flex-col items-center justify-center ${
+        isDark ? "text-gray-100" : "text-gray-900"
+      }`}
     >
-      {/* Background glow */}
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-[-20%] left-[-20%] w-96 h-96 rounded-full bg-green-500 opacity-20 blur-3xl animate-pulse-slow"></div>
-        <div className="absolute bottom-[-20%] right-[-20%] w-96 h-96 rounded-full bg-yellow-400 opacity-10 blur-2xl animate-pulse-slow"></div>
+      {/* Background gradient */}
+      <div className="absolute inset-0 -z-10">
+        <div
+          className={`w-full h-full bg-gradient-to-br ${
+            isDark
+              ? "from-blue-900 via-blue-800 to-blue-900"
+              : "from-blue-100 via-blue-50 to-indigo-100"
+          } animate-pulse`}
+        />
       </div>
 
       <div className="max-w-6xl mx-auto text-center relative z-10">
         <motion.h3
-          className="text-4xl md:text-5xl font-bold text-lime-300 mb-12 font-mono drop-shadow-[0_0_15px_rgba(172,255,47,0.5)]"
+          className={`text-4xl md:text-5xl font-bold mb-16 font-mono drop-shadow-[0_0_15px_rgba(0,150,255,0.5)] ${
+            isDark
+              ? "bg-gradient-to-r from-blue-400 via-blue-300 to-sky-400 bg-clip-text text-transparent"
+              : "bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent"
+          }`}
           initial={{ opacity: 0, y: -40 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: "-50px" }}
           transition={{ duration: 0.6 }}
         >
           {t.title}
@@ -107,10 +109,13 @@ const Portfolio: React.FC<Props> = ({ language }) => {
           {projects.map((project, i) => (
             <motion.div
               key={i}
-              className="group relative rounded-2xl overflow-hidden bg-gray-800/60 border border-gray-700 hover:border-green-400 transition-all duration-500 hover:shadow-2xl hover:scale-105 cursor-pointer"
+              className={`group relative rounded-2xl overflow-hidden border transition-all duration-500 cursor-pointer ${
+                isDark
+                  ? "bg-gray-800/40 border-gray-700 hover:border-blue-400 hover:shadow-2xl"
+                  : "bg-white/60 border-gray-300 hover:border-blue-400 hover:shadow-2xl"
+              }`}
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: false, margin: "-50px" }}
               transition={{ duration: 0.6, delay: i * 0.1 }}
             >
               <img
@@ -120,16 +125,16 @@ const Portfolio: React.FC<Props> = ({ language }) => {
               />
 
               <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-center items-center p-6 backdrop-blur-sm">
-                <h4 className="text-2xl font-semibold text-green-400 mb-2">
+                <h4 className="text-2xl font-semibold text-blue-400 mb-2">
                   {project.title[language]}
                 </h4>
-                <p className="text-gray-300 text-sm mb-4">
+                <p className="text-gray-100 text-sm mb-4">
                   {project.description[language]}
                 </p>
                 <div className="flex gap-4">
                   <button
                     onClick={() => setSelectedProject(project)}
-                    className="px-4 py-2 bg-green-500 rounded-full text-white hover:bg-green-400 transition-colors"
+                    className="px-4 py-2 bg-blue-500 rounded-full text-white hover:bg-blue-400 transition-colors"
                   >
                     {t.demo}
                   </button>
@@ -145,7 +150,11 @@ const Portfolio: React.FC<Props> = ({ language }) => {
               </div>
 
               <div className="p-4 text-left">
-                <h4 className="text-xl font-semibold text-gray-100">
+                <h4
+                  className={`text-xl font-semibold ${
+                    isDark ? "text-gray-100" : "text-gray-900"
+                  }`}
+                >
                   {project.title[language]}
                 </h4>
               </div>
@@ -164,14 +173,18 @@ const Portfolio: React.FC<Props> = ({ language }) => {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-gray-800 text-gray-200 rounded-2xl p-6 w-[90%] max-w-2xl relative shadow-2xl"
+              className={`rounded-2xl p-6 w-[90%] max-w-2xl relative shadow-2xl transition-colors duration-500 ${
+                isDark ? "bg-gray-800 text-gray-100" : "bg-white text-gray-900"
+              }`}
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               transition={{ duration: 0.3 }}
             >
               <button
-                className="absolute top-4 right-4 text-gray-100 hover:text-gray-600 text-2xl"
+                className={`absolute top-4 right-4 text-2xl ${
+                  isDark ? "text-gray-100 hover:text-gray-400" : "text-gray-900 hover:text-gray-600"
+                }`}
                 onClick={() => setSelectedProject(null)}
               >
                 ✕
@@ -197,9 +210,7 @@ const Portfolio: React.FC<Props> = ({ language }) => {
                 />
               )}
 
-              <p className="text-gray-100 mb-4 text-center">
-                {selectedProject.description[language]}
-              </p>
+              <p className="mb-4 text-center">{selectedProject.description[language]}</p>
             </motion.div>
           </motion.div>
         )}
